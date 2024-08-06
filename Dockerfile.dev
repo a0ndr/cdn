@@ -1,0 +1,14 @@
+FROM debian:12
+
+RUN apt-get update && apt-get install -y curl wget gnupg openssl procps
+RUN curl -sL https://deb.nodesource.com/setup_20.x  | bash -
+RUN apt-get -y install nodejs graphicsmagick && wget -qO- https://get.pnpm.io/install.sh | bash -
+RUN . ~/.bashrc
+ENV PATH="/root/.local/share/pnpm:$PATH"
+
+WORKDIR /app
+COPY . .
+RUN pnpm i
+
+EXPOSE 3000
+CMD ["pnpm", "nest", "start", "-w"]
